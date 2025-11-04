@@ -2,53 +2,118 @@
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// ====================== HAMBURGER + OVERLAY ======================
-const hamburger = document.getElementById('hamburger');
-const nav = document.getElementById('nav');
-const overlay = document.getElementById('navOverlay');
+// ====================== NAV / HAMBURGER ======================
+(() => {
+  const btn = document.getElementById('hamburger');
+  const nav = document.getElementById('nav');
+  if (!btn || !nav) return;
 
-let lastFocusedBeforeOpen = null;
+  // button hardening
+  if (btn.tagName === 'BUTTON' && btn.type !== 'button') btn.type = 'button';
 
-function toggleNav(open) {
-  if (!hamburger || !nav || !overlay) return;
+  // Overlay: postojeći ili kreiraj
+  let overlay =
+    document.getElementById('navOverlay') ||
+    document.querySelector('.nav-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'nav-overlay';
+    document.body.appendChild(overlay);
+  }
 
-  if (open) {
-    nav.classList.add('show');
-    overlay.classList.add('show');
-    document.documentElement.classList.add('no-scroll');
-    hamburger.setAttribute('aria-expanded', 'true');
+  const OPEN_CLASS = 'show';
+  const BTN_ACTIVE = 'active';
+  let lastFocusedBeforeOpen = null;
+  let scrollY = 0;
+
+  // ===== Scroll-freeze (bez skoka) =====
+  function freezeScroll() {
+    scrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.top = `-${scrollY}px`;
+    document.body.classList.add('no-scroll-fixed');
+  }
+  function unfreezeScroll() {
+    document.body.classList.remove('no-scroll-fixed');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollY);
+  }
+
+  // ===== Otvaranje / zatvaranje =====
+  function openNav() {
+    nav.classList.add(OPEN_CLASS);
+    overlay.classList.add(OPEN_CLASS);
+    btn.classList.add(BTN_ACTIVE);
+    btn.setAttribute('aria-expanded', 'true');
     nav.setAttribute('aria-hidden', 'false');
-
     lastFocusedBeforeOpen = document.activeElement;
-    const firstLink = nav.querySelector('a, button, [tabindex]:not([tabindex="-1"])');
-    firstLink?.focus();
-  } else {
-    nav.classList.remove('show');
-    overlay.classList.remove('show');
-    document.documentElement.classList.remove('no-scroll');
-    hamburger.setAttribute('aria-expanded', 'false');
+    freezeScroll();
+    nav.querySelector('a, button, [tabindex]:not([tabindex="-1"])')?.focus?.();
+  }
+
+  function closeNav() {
+    nav.classList.remove(OPEN_CLASS);
+    overlay.classList.remove(OPEN_CLASS);
+    btn.classList.remove(BTN_ACTIVE);
+    btn.setAttribute('aria-expanded', 'false');
     nav.setAttribute('aria-hidden', 'true');
+    unfreezeScroll();
     lastFocusedBeforeOpen?.focus?.();
   }
-}
-function closeNav(){ toggleNav(false); }
 
-if (hamburger && nav && overlay) {
-  hamburger.setAttribute('aria-expanded', 'false');
-  nav.setAttribute('aria-hidden', 'true');
+  function isOpen() {
+    return nav.classList.contains(OPEN_CLASS);
+  }
 
-  hamburger.addEventListener('click', () => {
-    const isOpen = !nav.classList.contains('show');
-    toggleNav(isOpen);
+  // ===== Klik na hamburger =====
+  btn.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href]');
+    if (btn.tagName === 'A') e.preventDefault();
+    if (a) {
+      const href = a.getAttribute('href') || '';
+      if (href === '#' || href.startsWith('#')) e.preventDefault();
+    }
+    isOpen() ? closeNav() : openNav();
+    e.stopPropagation();
   });
 
+  // ===== Klik unutar menija =====
+  nav.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) { e.stopPropagation(); return; }
+
+    const href = link.getAttribute('href') || '';
+    // #anchor: PRVO zatvorimo meni, PA onda skrol (sledeći frame)
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const runScroll = () => smoothGoTo(href);
+      closeNav();
+      // odloži skrol da unfreeze vrati layout pre pomeranja
+      requestAnimationFrame(() => requestAnimationFrame(runScroll));
+      return;
+    }
+
+    // spoljašnji link – samo zatvori i pusti default
+    closeNav();
+  });
+
+  // ===== Klik na overlay zatvara =====
   overlay.addEventListener('click', closeNav);
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && nav.classList.contains('show')) closeNav();
+  // ===== Klik van menija/dugmeta zatvara =====
+  document.addEventListener('click', (e) => {
+    if (!isOpen()) return;
+    if (!nav.contains(e.target) && !btn.contains(e.target)) closeNav();
+  });
 
-    // focus trap u otvorenom panelu
-    if (e.key === 'Tab' && nav.classList.contains('show')) {
+  // ===== Tastatura =====
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen()) {
+      closeNav();
+      btn.focus();
+      return;
+    }
+    // focus-trap
+    if (e.key === 'Tab' && isOpen()) {
       const f = nav.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
       if (!f.length) return;
       const first = f[0], last = f[f.length - 1];
@@ -56,35 +121,17 @@ if (hamburger && nav && overlay) {
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
   });
-}
+})();
 
 // ====================== SMOOTH SCROLL HELPERS ======================
 function smoothGoTo(hash){
   const target = document.querySelector(hash);
   if (!target) return;
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  // upiši hash u URL bez skoka
   if (history.pushState) history.pushState(null, '', hash);
 }
 
-// ====================== LINKOVI U HAMBURGER PANELU ======================
-if (nav) {
-  nav.addEventListener('click', (e) => {
-    const link = e.target instanceof Element ? e.target.closest('a') : null;
-    if (!link) return;
-
-    const href = link.getAttribute('href') || '';
-    if (href.startsWith('#')) {
-      e.preventDefault();
-      smoothGoTo(href);
-      closeNav();
-    } else {
-      closeNav(); // spoljašnji link – samo zatvori panel i pusti default
-    }
-  });
-}
-
-// ====================== LINKOVI VAN MENIJA (npr. dugme u hero sekciji) ======================
+// ====================== LINKOVI VAN MENIJA (npr. dugme u hero) ======================
 document.querySelectorAll('a[href^="#"]:not(.nav a)').forEach(a => {
   a.addEventListener('click', (e) => {
     const hash = a.getAttribute('href');
@@ -93,12 +140,11 @@ document.querySelectorAll('a[href^="#"]:not(.nav a)').forEach(a => {
     if (!target) return;
     e.preventDefault();
     smoothGoTo(hash);
-    if (nav?.classList.contains('show')) closeNav();
   });
 });
 
 // ====================== REVEAL (IntersectionObserver) ======================
-(function initReveal() {
+(() => {
   const items = document.querySelectorAll('.reveal');
   if (!items.length) return;
 

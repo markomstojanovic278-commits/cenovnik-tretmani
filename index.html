@@ -15,25 +15,23 @@
 <!-- HEADER -->
 <header class="site-header reveal">
   <div class="header-inner">
-    <a href="#" class="logo">Hair Artist</a>
+    <img src="IMG\13.png" alt="Hair Artist" class="logo">
 
     <nav class="nav" id="nav" aria-label="Glavna navigacija">
       <a href="#kratko">Kratko o tretmanima</a>
       <a href="#proteinski">PROTEINSKI TRETMAN</a>
-      <a href="#collagen">Collagen & Hyaluron</a>
+      <a href="#collagen">Collagen &amp; Hyaluron</a>
       <a href="#olaplex">Nano dubinska obnova</a>
       <a href="#keratin">Laminacija kose</a>
-      <a href="#dubinska">Scalp & Detox tretman</a>
+      <a href="#dubinska">Scalp &amp; Detox tretman</a>
     </nav>
 
-    <button class="hamburger" id="hamburger" aria-label="Meni" aria-expanded="false" aria-controls="nav">
+    <!-- VAŽNO: type="button" da ne skroluje na vrh -->
+    <button class="hamburger" id="hamburger" type="button" aria-label="Meni" aria-expanded="false" aria-controls="nav">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
-
-<!-- Overlay za zatvaranje panela klikom -->
-<div class="nav-overlay" id="navOverlay"></div>
 
   <!-- HERO -->
   <section class="hero reveal" aria-label="Uvod">
@@ -47,7 +45,8 @@
         <li>Više od 10 godina profesionalnog rada</li>
         <li>Porodična tradicija i rad u salonu od najranijeg detinjstva</li>
       </ul>
-      <a class="btn" href="#kratko">Pogledaj tretmane</a>
+      <p>Uclanite se na nas kanal kako bi bili upuceni u sve inovacije i popuste koje nudimo</p>
+      <a class="btn" href="https://www.instagram.com/channel/AbZhcv6vqcO4qKiF/?igsh=NWVrcjV3MjF3bXZ6">Pridruzi se</a>
     </div>
   </section>
 
@@ -91,6 +90,7 @@
       <div class="detail-media">
         <!-- Zameni putanju slike po potrebi -->
         <img src="IMG/proteinskiKeratin.png" alt="Proteinski tretman (organski)">
+        <h2>Doplata za gustinu-1500din</h2>
       </div>
 
       <div class="detail-text">
@@ -178,7 +178,50 @@
     <div class="detail-row reveal">
       <div class="detail-media">
         <!-- Zameni putanju slike po potrebi -->
-        <img src="IMG/nanoDubinskaObnova.png" alt="Nano dubinska obnova kose">
+        <section class="cenovnik-section">
+  <div class="cenovnik-box">
+    <h2>CENOVNIK NANO DUBINSKE OBNOVE</h2>
+
+    <div class="cen-item">
+      <span>Nano dubinska obnova COLLAGEN & HYALURON 
+        <small>(hidratacija i obnova bez ispravljanja)</small>
+      </span>
+      <strong>7000 RSD</strong>
+    </div>
+
+    <div class="cen-item">
+      <span>Nano dubinska obnova SILK PROTEIN 
+        <small>(hidratacija i obnova bez zaglađivanja)</small>
+      </span>
+      <strong>6000 RSD</strong>
+    </div>
+
+    <div class="cen-item">
+      <span>Nano dubinska obnova MOROCCANOIL</span>
+      <strong>5000 RSD</strong>
+    </div>
+
+    <div class="cen-item">
+      <span>Nano dubinska obnova AGE THERAPY</span>
+      <strong>5000 RSD</strong>
+    </div>
+
+    <div class="cen-item">
+      <span>Nano dubinska obnova BLACK CAVIAR</span>
+      <strong>5000 RSD</strong>
+    </div>
+
+    <p class="note">
+      Uz svaki tretman nano dubinske obnove dobijate skraćivanje krajeva i feniranje (nije obavezno)
+    </p>
+
+    <div class="cen-item dodatno">
+      <span>Skraćivanje krajeva i feniranje (bez tretmana)</span>
+      <strong>3000 RSD</strong>
+    </div>
+  </div>
+</section>
+
       </div>
 
       <div class="detail-text">
@@ -227,7 +270,26 @@
     <div class="detail-row reverse reveal">
       <div class="detail-media">
         <!-- Zameni putanju slike po potrebi -->
-        <img src="IMG/laminacija.png" alt="K/H Laminacija kose">
+        <section class="cenovnik-section">
+  <div class="cenovnik-box">
+    <h2>CENOVNIK LAMINACIJA KOSE</h2>
+
+    <p class="item">
+      <span>KRATKA / SREDNJA DUŽINA KOSE</span>
+      <strong>4000 RSD</strong>
+    </p>
+
+    <p class="item">
+      <span>DUGA / EXTRA DUGA KOSA</span>
+      <strong>6000 RSD</strong>
+    </p>
+
+    <p class="note">
+      Uz tretman dobijate skraćivanje krajeva i feniranje (nije obavezno)
+    </p>
+  </div>
+</section>
+
       </div>
 
       <div class="detail-text">
@@ -275,7 +337,25 @@
       
       <div class="detail-media">
         <!-- Zameni putanju slike po potrebi -->
-        <img src="IMG/ChatGPT Image Oct 30, 2025, 11_55_29 PM.png" alt="Scalp & Hair Detox tretman">
+        <section class="cenovnik-section">
+  <div class="cenovnik-box">
+
+    <h2>SCALP DETOX</h2>
+
+    <p class="subtitle">Cena za sve dužine</p>
+
+    <div class="cen-item">
+      <span>Scalp detox tretman</span>
+      <strong>4000 RSD</strong>
+    </div>
+
+    <p class="note">
+      Uz tretman dobijate i feniranje
+    </p>
+
+  </div>
+</section>
+
       </div>
 
       <div class="detail-text">
@@ -333,23 +413,22 @@
   </div>
 </section>
 
- <!-- CTA -->
-  <section class="section cta alt" id="kontakt">
-    <div class="container reveal">
-      <h2>Zakaži termin</h2>
-      <p>Najbrže preko WhatsApp-a ili poziva.</p>
-      <div class="cta-actions">
-        <a class="btn" href="https://wa.me/381601234567" target="_blank" rel="noopener">WhatsApp</a>
-        <a class="btn outline" href="tel:+381601234567">Pozovi</a>
+  <!-- CTA -->
+    <section class="section cta alt" id="kontakt">
+      <div class="container reveal">
+        <h2>Zakaži termin</h2>
+        <p>Najbrže preko WhatsApp-a ili poziva.</p>
+        <div class="cta-actions">
+          <a class="btn" href="https://wa.me/381621828589" target="_blank" rel="noopener">WhatsApp</a>
+          <a class="btn outline" href="tel:+381621828589">Pozovi</a>
+          <a class="btn" href="https://www.instagram.com/hair.artist.ljubica/" target="_blank" rel="noopener">Instagram</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
   <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Hair Artist · Sva prava zadržana</p>
-    </div>
+   <footer class="footer reveal">
+    <small>© 2021 PR frizerski studio HAIR ARTIST Beograd — Cenovnik.</small>
   </footer>
 
   <script src="JS/script.js"></script>
